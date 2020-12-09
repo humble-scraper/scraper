@@ -7,6 +7,8 @@ from core.scraper import Scraper
 def print_bundles(scraper: Scraper) -> None:
     elements = scraper.scrape_bundles()
     print(elements)
+    for ele in elements:
+        print(ele[2])
 
 
 def main() -> None:

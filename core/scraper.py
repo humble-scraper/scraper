@@ -19,11 +19,6 @@ class Scraper:
         }
     }
 
-    _BUNDLE_TITLE_SEARCH: Dict[str, Any] = {
-        "name": "span",
-        "attrs": {"class": "name"}
-    }
-
     # Initialize the selenium stuff
     _CHROME_OPTIONS = Options()
     _CHROME_OPTIONS.add_argument("--headless")
@@ -38,10 +33,12 @@ class Scraper:
         super().__init__()
         self.driver = Scraper.__init_web_driver()
 
-    def scrape_book(self, url: str) -> Generator[str, None, List[str]]:
+    @staticmethod
+    def scrape_book(url: str) -> Generator[str, None, List[str]]:
         ls: List = list()
-        for span in BeautifulSoup(self.__get_book_html(),
-                                  "html.parser").find_all(**self.search_element):
+        for span in BeautifulSoup(
+                    Scraper.__get_book_html(url), "html.parser"
+                ).find_all(**Scraper._BOOK_TITLE_SEARCH):
             txt: str = span.get_text()
             ls.append(txt)
             yield txt
@@ -50,13 +47,13 @@ class Scraper:
     def scrape_bundles(self) -> List[Tuple[str, WebElement]]:
         self.driver.get(Scraper._HOME_PAGE)
         self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
-        elements: List[WebElement] = self.driver.find_elements_by_css_selector(
-                Scraper._BUNDLE_TITLE_SELECTOR)
-        elements = Scraper.__to_title_tuples(elements)
+        elements = self.driver.find_elements_by_css_selector(Scraper._BUNDLE_TITLE_SELECTOR)
+        elements = Scraper.__to_title_and_link_tuples(elements)
+        elements = Scraper.__add_booklist(elements)
         return elements
 
     @staticmethod
-    def __to_title_tuples(elements: List[WebElement]) -> List[Tuple[str, str]]:
+    def __to_title_and_link_tuples(elements: List[WebElement]) -> List[Tuple[str, str]]:
         return [
             e for e in [
                 (
@@ -69,16 +66,18 @@ class Scraper:
         ]
 
     @staticmethod
+    def __add_booklist(elements: List[Tuple[str, str]]) -> List[Tuple[str, str, List[str]]]:
+        return [
+            (ele[0], ele[1], [e for e in Scraper.scrape_book(ele[1])])
+            for ele in elements
+        ]
+
+    @staticmethod
     def __init_web_driver() -> WebDriver:
         return webdriver.Chrome(
                 executable_path=Scraper._EXECUTABLE_PATH,
                 options=Scraper._CHROME_OPTIONS)
 
-    def __get_book_html(self) -> str:
-        return requests.get(self.url).text
-
-    def __repr__(self) -> Dict[str, Any]:
-        return {"url": self.url, "search_element": self.search_element}
-
-    def __str__(self) -> str:
-        return self.url
+    @staticmethod
+    def __get_book_html(url: str) -> str:
+        return requests.get(url).text
