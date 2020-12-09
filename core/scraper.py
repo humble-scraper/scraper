@@ -1,6 +1,7 @@
 from typing import Any, Dict, Generator, List, Tuple
 
 import requests
+import re
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -29,8 +30,9 @@ class Scraper:
     _DROP_DOWN_BUTTON_SELECTOR = ".js-bundle-dropdown"
     _BUNDLE_TITLE_SELECTOR = "a.bundle"
 
-    def __init__(self) -> None:
+    def __init__(self, books_only: bool = True) -> None:
         super().__init__()
+        self.books_only = books_only
         self.driver = Scraper.__init_web_driver()
 
     @staticmethod
@@ -49,8 +51,21 @@ class Scraper:
         self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
         elements = self.driver.find_elements_by_css_selector(Scraper._BUNDLE_TITLE_SELECTOR)
         elements = Scraper.__to_title_and_link_tuples(elements)
-        elements = Scraper.__add_booklist(elements)
+        if self.books_only:
+            elements = Scraper.__filter_books_only(elements)
+        elements = Scraper.__add_booklists(elements)
         return elements
+
+    @staticmethod
+    def __filter_books_only(elements: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
+        return [
+            ele for ele in elements
+            if Scraper.__is_book_bundle(ele[0])
+        ]
+
+    @staticmethod
+    def __is_book_bundle(title: str) -> bool:
+        return re.match(r'humble book bundle', title, re.IGNORECASE) is not None
 
     @staticmethod
     def __to_title_and_link_tuples(elements: List[WebElement]) -> List[Tuple[str, str]]:
@@ -66,9 +81,9 @@ class Scraper:
         ]
 
     @staticmethod
-    def __add_booklist(elements: List[Tuple[str, str]]) -> List[Tuple[str, str, List[str]]]:
+    def __add_booklists(elements: List[Tuple[str, str]]) -> List[Tuple[str, str, List[str]]]:
         return [
-            (ele[0], ele[1], [e for e in Scraper.scrape_book(ele[1])])
+            (ele[0], ele[1], list(Scraper.scrape_book(ele[1])))
             for ele in elements
         ]
 

@@ -8,7 +8,7 @@ def print_bundles(scraper: Scraper) -> None:
     elements = scraper.scrape_bundles()
     print(elements)
     for ele in elements:
-        print(ele[2])
+        print(ele[0])
 
 
 def main() -> None:
