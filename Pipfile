@@ -10,6 +10,7 @@ autopep8 = "*"
 [packages]
 requests = "*"
 beautifulsoup4 = "*"
+selenium = "*"
 
 [requires]
 python_version = "3.8"
