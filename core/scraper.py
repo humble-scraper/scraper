@@ -1,10 +1,10 @@
-from typing import Any, Dict, Generator, List
+from typing import Any, Dict, Generator, List, Tuple
 
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 TEST_URL: str = "https://www.humblebundle.com/books/hacking-101-no-starch-press-books?hmb_source=humble_home&hmb_medium=product_tile&hmb_campaign=mosaic_section_2_layout_index_2_layout_type_twos_tile_index_1_c_hacking101nostarchpress_bookbundle"
@@ -32,7 +32,7 @@ class Scraper:
     _EXECUTABLE_PATH = "lib/chromedriver"
     _HOME_PAGE = "https://www.humblebundle.com/"
     _DROP_DOWN_BUTTON_SELECTOR = ".js-bundle-dropdown"
-    _BUNDLE_TITLE_SELECTOR = "span.name"
+    _BUNDLE_TITLE_SELECTOR = "a.bundle"
 
     def __init__(self) -> None:
         super().__init__()
@@ -47,12 +47,16 @@ class Scraper:
             yield txt
         return ls
 
-    def scrape_bundles(self) -> List[WebElement]:
+    def scrape_bundles(self) -> List[Tuple[str, WebElement]]:
         self.driver.get(Scraper._HOME_PAGE)
         self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
-        # div: WebElement = self.driver.find_element_by_class_name("bundle-dropdown-content-wrapper")
         elements: List[WebElement] = self.driver.find_elements_by_css_selector(
                 Scraper._BUNDLE_TITLE_SELECTOR)
+        elements = [
+            (ele.find_element_by_css_selector("span.name").text, ele)
+            for ele in elements
+        ]
+        elements = [ele for ele in elements if ele[0] != '']
         return elements
 
     @staticmethod
