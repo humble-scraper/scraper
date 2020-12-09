@@ -1,9 +1,6 @@
 #!/usr/bin/env python3.8
 
 
-from typing import List
-
-from selenium.webdriver.remote.webelement import WebElement
 from core.scraper import Scraper
 
 

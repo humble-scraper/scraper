@@ -52,12 +52,21 @@ class Scraper:
         self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
         elements: List[WebElement] = self.driver.find_elements_by_css_selector(
                 Scraper._BUNDLE_TITLE_SELECTOR)
-        elements = [
-            (ele.find_element_by_css_selector("span.name").text, ele)
-            for ele in elements
-        ]
-        elements = [ele for ele in elements if ele[0] != '']
+        elements = Scraper.__to_title_tuples(elements)
         return elements
+
+    @staticmethod
+    def __to_title_tuples(elements: List[WebElement]) -> List[Tuple[str, str]]:
+        return [
+            e for e in [
+                (
+                    ele.find_element_by_css_selector("span.name").text,
+                    ele.get_attribute("href")
+                )
+                for ele in elements
+            ]
+            if e[0] != ''
+        ]
 
     @staticmethod
     def __init_web_driver() -> WebDriver:
