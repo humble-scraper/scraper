@@ -1,3 +1,6 @@
+# Don't need the requirements.txt file
+**/requirements.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
