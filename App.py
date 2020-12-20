@@ -2,6 +2,11 @@
 
 
 from core.scraper import Scraper
+from time import sleep
+from fastapi import FastAPI
+
+
+app = FastAPI()
 
 
 def print_bundles(scraper: Scraper) -> None:
@@ -13,9 +18,12 @@ def print_bundles(scraper: Scraper) -> None:
 
 def main() -> None:
     scraper = Scraper()
-    # bundles: List[WebElement] = scraper.scrape_bundles()
-    print_bundles(scraper)
+    while True:
+        print_bundles(scraper)
+        print("-----------------------------------------------------------------")
+        sleep(1)
 
 
 if __name__ == "__main__":
+    app.run()
     main()

@@ -1,3 +1,4 @@
+from time import sleep
 from typing import Any, Dict, Generator, List, Tuple
 
 import requests
@@ -56,6 +57,7 @@ class Scraper:
     def scrape_bundles(self) -> List[Tuple[str, WebElement]]:
         self.driver.get(Scraper._HOME_PAGE)
         self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
+        sleep(0.10)
         elements = self.driver.find_elements_by_css_selector(Scraper._BUNDLE_TITLE_SELECTOR)
         elements = Scraper.__to_title_and_link_tuples(elements)
         if self.books_only:
@@ -97,7 +99,7 @@ class Scraper:
     @staticmethod
     def __init_web_driver() -> WebDriver:
         return webdriver.Chrome(
-                # executable_path=Scraper._EXECUTABLE_PATH,
+                executable_path=Scraper._EXECUTABLE_PATH,
                 options=Scraper._CHROME_OPTIONS)
 
     @staticmethod

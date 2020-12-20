@@ -7,9 +7,13 @@ name = "pypi"
 requests = "*"
 beautifulsoup4 = "*"
 selenium = "*"
+python-decouple = "*"
+fastapi = "*"
+uvicorn = "*"
 
 [dev-packages]
 flake8 = "*"
+autopep8 = "*"
 
 [requires]
 python_version = "3.9"
