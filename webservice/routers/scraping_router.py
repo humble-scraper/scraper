@@ -7,4 +7,4 @@ scrouter = APIRouter()
 
 @scrouter.get("/")
 async def scrape():
-    return SCRAPER.scrape_bundles()
+    return SCRAPER.scrape_bundles_from()

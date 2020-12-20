@@ -1,21 +1,14 @@
-from time import sleep
-from typing import Any, Dict, Generator, List, Tuple
+from typing import Any, Dict, Generator, List, Optional, Tuple, Union
 
 import atexit
 import requests
-import re
-import os
+import json
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
 
 from multiprocessing.managers import BaseManager
 
 
-TEST_URL: str = "https://www.humblebundle.com/books/hacking-101-no-starch-press-books?hmb_source=humble_home&hmb_medium=product_tile&hmb_campaign=mosaic_section_2_layout_index_2_layout_type_twos_tile_index_1_c_hacking101nostarchpress_bookbundle"
-BUNDLE_URL: str = "https://www.humblebundle.com/store"
+_HOME_PAGE = "https://www.humblebundle.com/"
 
 
 class Scraper:
@@ -26,25 +19,20 @@ class Scraper:
         }
     }
 
-    # Initialize the selenium stuff
-    _CHROME_OPTIONS = Options()
-    _CHROME_OPTIONS.add_argument("--headless")
-    _CHROME_OPTIONS.add_argument("--window-size=1920,1080")
-
-    if os.path.exists("/usr/bin/google-chrome"):
-        _CHROME_OPTIONS.binary_location = "/usr/bin/google-chrome"
-    elif os.path.exists("/usr/bin/chromium-browser"):
-        _CHROME_OPTIONS.binary_location = "/usr/bin/chromium-browser"
-
-    _EXECUTABLE_PATH = "lib/chromedriver"
-    _HOME_PAGE = "https://www.humblebundle.com/"
-    _DROP_DOWN_BUTTON_SELECTOR = ".js-bundle-dropdown"
-    _BUNDLE_TITLE_SELECTOR = "a.bundle"
-
-    def __init__(self, books_only: bool = True) -> None:
+    def __init__(self, base_url: Optional[str] = _HOME_PAGE) -> None:
         super().__init__()
-        self.books_only = books_only
-        self.driver = Scraper.__init_web_driver()
+        self._base_url = base_url
+
+    @property
+    def url(self) -> str:
+        return self._base_url
+
+    @url.setter
+    def url(self, new_url) -> None:
+        self._base_url = new_url
+
+    def scrape_bundles(self, with_books: Optional[bool] = False):
+        return Scraper.scrape_bundles_from(base_url=self._base_url, with_books=with_books)
 
     @staticmethod
     def scrape_book(url: str) -> Generator[str, None, List[str]]:
@@ -57,57 +45,55 @@ class Scraper:
             yield txt
         return ls
 
-    def scrape_bundles(self) -> List[Tuple[str, WebElement]]:
-        self.driver.get(Scraper._HOME_PAGE)
-        self.driver.find_element_by_css_selector(Scraper._DROP_DOWN_BUTTON_SELECTOR).click()
-        sleep(0.10)
-        elements = self.driver.find_elements_by_css_selector(Scraper._BUNDLE_TITLE_SELECTOR)
-        elements = Scraper.__to_title_and_link_tuples(elements)
-        if self.books_only:
-            elements = Scraper.__filter_books_only(elements)
-        elements = Scraper.__add_booklists(elements)
-        return elements
-
-    @staticmethod
-    def __filter_books_only(elements: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
-        return [
-            ele for ele in elements
-            if Scraper.__is_book_bundle(ele[0])
-        ]
-
-    @staticmethod
-    def __is_book_bundle(title: str) -> bool:
-        return re.match(r'humble book bundle', title, re.IGNORECASE) is not None
-
-    @staticmethod
-    def __to_title_and_link_tuples(elements: List[WebElement]) -> List[Tuple[str, str]]:
-        return [
-            e for e in [
-                (
-                    ele.find_element_by_css_selector("span.name").text,
-                    ele.get_attribute("href")
-                )
-                for ele in elements
-            ]
-            if e[0] != ''
-        ]
-
-    @staticmethod
-    def __add_booklists(elements: List[Tuple[str, str]]) -> List[Tuple[str, str, List[str]]]:
-        return [
-            (ele[0], ele[1], list(Scraper.scrape_book(ele[1])))
-            for ele in elements
-        ]
-
-    @staticmethod
-    def __init_web_driver() -> WebDriver:
-        return webdriver.Chrome(
-                executable_path=Scraper._EXECUTABLE_PATH,
-                options=Scraper._CHROME_OPTIONS)
-
     @staticmethod
     def __get_book_html(url: str) -> str:
         return requests.get(url).text
+
+    @staticmethod
+    def scrape_bundles_from(
+            base_url: Optional[str] = _HOME_PAGE,
+            with_books: Optional[bool] = False
+            ) -> List[Tuple[str, str]]:
+        got = requests.get(base_url)
+        souped = BeautifulSoup(got.text, "html.parser")
+        found: dict = json.loads(souped.find("script", {"id": "base-webpack-json-data"}).string)
+        return list(
+            Scraper.__to_name_url_dicts(
+                Scraper.__to_full_urls(base_url, Scraper.__get_urls(found)),
+                with_books)
+        )
+
+    @staticmethod
+    def __get_urls(found: dict) -> Generator[str, None, None]:
+        return (
+            f["product_url"]
+            for f in found["navbar"]["productTiles"]
+            if "/books/" in f["product_url"]
+        )
+
+    @staticmethod
+    def __to_full_urls(
+            prefix: str,
+            urls: Generator[str, None, None]
+            ) -> Generator[str, None, None]:
+        return (prefix + url for url in urls)
+
+    @staticmethod
+    def __to_name_url_dicts(
+            full_urls: Generator[str, None, None],
+            with_books: Optional[bool] = False
+            ) -> Generator[Dict[str, Union[str, dict]], None, None]:
+        return (
+            {
+                "name": url.split("/")[-1],
+                "url": url,
+                "books": list(Scraper.scrape_book(url))
+            } if with_books else {
+                "name": url.split("/")[-1],
+                "url": url
+            }
+            for url in full_urls
+        )
 
 
 class ScraperManager(BaseManager):

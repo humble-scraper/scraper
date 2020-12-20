@@ -7,16 +7,9 @@ from typing import Dict, Optional
 
 import uvicorn
 
-from core.scraper import SCRAPER, Scraper
+from core.scraper import SCRAPER
 
 procs: Dict[str, Process] = {}
-
-
-def print_bundles(scraper: Scraper) -> None:
-    elements = scraper.scrape_bundles()
-    print(elements)
-    for ele in elements:
-        print(ele[0])
 
 
 def _web_service_worker() -> None:
@@ -24,8 +17,9 @@ def _web_service_worker() -> None:
 
 
 def _main_loop_worker() -> None:
-    while True:
-        print(SCRAPER.scrape_bundles())
+    # while True:
+    while False:
+        print(SCRAPER.scrape_bundles_from())
         print("-----------------------------------------------------------------")
         print("-----------------------------------------------------------------")
         sleep(1)
