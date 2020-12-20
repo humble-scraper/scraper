@@ -2,8 +2,8 @@
 
 
 from multiprocessing import Process
-from time import sleep
 from typing import Dict, Optional
+from time import sleep, time
 
 import uvicorn
 
@@ -12,17 +12,22 @@ from core.scraper import SCRAPER
 procs: Dict[str, Process] = {}
 
 
+def better_sleep(sleep_time: Optional[float] = 60):
+    start = time()
+    while time() - start < sleep_time:
+        sleep(min((sleep_time - time() + start), 60))
+
+
 def _web_service_worker() -> None:
     uvicorn.run("webservice.webscrapp:scrapp", host="127.0.0.1", port=9999, log_level="debug")
 
 
-def _main_loop_worker() -> None:
-    # while True:
-    while False:
+def _main_loop_worker(sleep_time: float) -> None:
+    while True:
         print(SCRAPER.scrape_bundles_from())
         print("-----------------------------------------------------------------")
         print("-----------------------------------------------------------------")
-        sleep(1)
+        better_sleep(sleep_time)
 
 
 def run_web_app(in_new_process: Optional[bool] = True) -> None:
@@ -35,12 +40,14 @@ def run_web_app(in_new_process: Optional[bool] = True) -> None:
         _web_service_worker()
 
 
-def run_main_loop(in_new_process: Optional[bool] = False) -> None:
+def run_main_loop(in_new_process: Optional[bool] = True,
+                  sleep_time: Optional[float] = 60**60) -> None:
+    print(f"Running main loop{' in new process' if in_new_process else ''}...")
     if in_new_process:
-        procs["mainloop"] = Process(target=_main_loop_worker)
+        procs["mainloop"] = Process(target=_main_loop_worker, args=(sleep_time, ))
         procs["mainloop"].start()
     else:
-        _main_loop_worker()
+        _main_loop_worker(sleep_time)
 
 
 def joinall() -> None:
@@ -55,7 +62,7 @@ def killall() -> None:
 
 def main() -> None:
     run_web_app()
-    run_main_loop()
+    run_main_loop(sleep_time=60**60)
     joinall()
 
 

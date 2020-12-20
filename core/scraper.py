@@ -1,11 +1,8 @@
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union
 
-import atexit
 import requests
 import json
 from bs4 import BeautifulSoup
-
-from multiprocessing.managers import BaseManager
 
 
 _HOME_PAGE = "https://www.humblebundle.com/"
@@ -96,12 +93,4 @@ class Scraper:
         )
 
 
-class ScraperManager(BaseManager):
-    pass
-
-
-ScraperManager.register("Scraper", Scraper)
-MANAGER = ScraperManager()
-MANAGER.start()
-SCRAPER: Scraper = MANAGER.Scraper()
-atexit.register(MANAGER.shutdown)
+SCRAPER: Scraper = Scraper()
