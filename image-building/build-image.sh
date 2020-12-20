@@ -6,19 +6,17 @@ freeze_requirements() {
 
 build_image() {
     docker build -t humblebundlescraper:latest \
-                 -f "$(realpath $(find ./ -type f -name scraper.dockerfile))" \
-                 --rm \  # Removes intermediary <none> images
+                 -f ./image-building/scraper.dockerfile \
+                 --rm \
                  .
-}
-
-# TODO: implement the run_container function
-run_container() {
-    echo "TODO: Implement the run_container function"
 }
 
 cleanup() {
     # Requirements file is no longer needed
     rm -f requirements.txt
+
+    # OPTIONAL: clean up docker images
+    docker image prune -f
 }
 
 main() (
@@ -27,8 +25,6 @@ main() (
     freeze_requirements
     echo "========= BUILDING IMAGE ========="
     build_image
-    echo "========= RUNNING CONTAINER ========="
-    run_container
     echo "========= CLEANING UP TEMPORARY FILES ========="
     cleanup
 )

@@ -2,6 +2,7 @@ from typing import Any, Dict, Generator, List, Tuple
 
 import requests
 import re
+import os
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -25,7 +26,12 @@ class Scraper:
     _CHROME_OPTIONS = Options()
     _CHROME_OPTIONS.add_argument("--headless")
     _CHROME_OPTIONS.add_argument("--window-size=1920,1080")
-    _CHROME_OPTIONS.binary_location = "/usr/bin/google-chrome"
+
+    if os.path.exists("/usr/bin/google-chrome"):
+        _CHROME_OPTIONS.binary_location = "/usr/bin/google-chrome"
+    elif os.path.exists("/usr/bin/chromium-browser"):
+        _CHROME_OPTIONS.binary_location = "/usr/bin/chromium-browser"
+
     _EXECUTABLE_PATH = "lib/chromedriver"
     _HOME_PAGE = "https://www.humblebundle.com/"
     _DROP_DOWN_BUTTON_SELECTOR = ".js-bundle-dropdown"
@@ -91,7 +97,7 @@ class Scraper:
     @staticmethod
     def __init_web_driver() -> WebDriver:
         return webdriver.Chrome(
-                executable_path=Scraper._EXECUTABLE_PATH,
+                # executable_path=Scraper._EXECUTABLE_PATH,
                 options=Scraper._CHROME_OPTIONS)
 
     @staticmethod
