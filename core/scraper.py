@@ -1,6 +1,7 @@
 from time import sleep
 from typing import Any, Dict, Generator, List, Tuple
 
+import atexit
 import requests
 import re
 import os
@@ -9,6 +10,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
+
+from multiprocessing.managers import BaseManager
 
 
 TEST_URL: str = "https://www.humblebundle.com/books/hacking-101-no-starch-press-books?hmb_source=humble_home&hmb_medium=product_tile&hmb_campaign=mosaic_section_2_layout_index_2_layout_type_twos_tile_index_1_c_hacking101nostarchpress_bookbundle"
@@ -105,3 +108,14 @@ class Scraper:
     @staticmethod
     def __get_book_html(url: str) -> str:
         return requests.get(url).text
+
+
+class ScraperManager(BaseManager):
+    pass
+
+
+ScraperManager.register("Scraper", Scraper)
+MANAGER = ScraperManager()
+MANAGER.start()
+SCRAPER: Scraper = MANAGER.Scraper()
+atexit.register(MANAGER.shutdown)
