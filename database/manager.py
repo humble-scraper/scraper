@@ -1,8 +1,10 @@
 
 
+import atexit
 from datetime import datetime
 from typing import Optional, Union
 
+import pymongo
 from core.bundle import BookBundle
 from pymongo import MongoClient
 
@@ -11,12 +13,13 @@ class Manager:
     def __init__(self,
                  db_url: Optional[str] = "mongodb://localhost:27017/",
                  db_name: Optional[str] = "humblebundle",
-                 collection_name: Optional[str] = "book-bundles") -> None:
+                 collection_name: Optional[str] = "bookbundles") -> None:
         super().__init__()
         self.__url = db_url
         self.__client = MongoClient(db_url)
         self.__db = self.__client[db_name]
         self.__collection = self.__db.get_collection(collection_name)
+        atexit.register(self.close)
 
     @property
     def url(self) -> str:
@@ -63,7 +66,8 @@ class Manager:
         Returns:
             Bundle: A Bundle if found, else None
         """
-        pass
+        got = self.__collection.find_one({}, sort=[("_id", pymongo.DESCENDING)])
+        return BookBundle.from_dict(got) if got is not None else None
 
     def has_bundle(self, bundle: Union[BookBundle, str]) -> bool:
         """Check whether or not the database contains the given Bundle or name of Bundle
@@ -76,6 +80,10 @@ class Manager:
         """
         name = bundle.name if isinstance(bundle, BookBundle) else bundle
         return self.get_bundle(name) is not None
+
+    def close(self) -> None:
+        print("Closing database...")
+        self.__client.close()
 
 
 SCRANAGER = Manager()
