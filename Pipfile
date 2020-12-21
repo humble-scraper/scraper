@@ -10,6 +10,7 @@ selenium = "*"
 python-decouple = "*"
 fastapi = "*"
 uvicorn = "*"
+pymongo = "*"
 
 [dev-packages]
 flake8 = "*"

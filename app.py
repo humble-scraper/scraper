@@ -9,6 +9,7 @@ import uvicorn
 
 from core.scraper import SCRAPER
 
+
 procs: Dict[str, Process] = {}
 
 
