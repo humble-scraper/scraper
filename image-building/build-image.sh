@@ -6,7 +6,8 @@ freeze_requirements() {
 
 build_image() {
     docker build -t humblebundlescraper:latest \
-                 -f ./image-building/scraper.dockerfile \
+                 -f ./image-building/mongo-alpine-python.dockerfile \
+                 -p 9999:9999 \
                  --rm \
                  .
 }
