@@ -31,7 +31,7 @@ class Manager:
         return self.__url
 
     def get_bundle(self, bundle_name: str) -> BookBundle:
-        """Find a Bundle in the database, by name
+        """Find a Bundle     in the database, by name
 
         Args:
             bundle_name (str): The Bundle to search for
@@ -82,7 +82,7 @@ class Manager:
         return self.get_bundle(name) is not None
 
     def close(self) -> None:
-        print("Closing database...")
+        print("Closing database connection...")
         self.__client.close()
 
 
