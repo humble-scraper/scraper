@@ -6,9 +6,9 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.9/main' >> /etc/apk/repositori
     && apk add mongodb yaml-cpp=0.6.2-r2 \
     && mongo -version \
     && mkdir --parents /data/db/ \
-    && adduser -D -g '' mongo \
-    && chown -R mongo:mongo /data/
+    && adduser -D -g '' scraper \
+    && chown -R scraper:scraper /data/
 
-USER mongo
+USER scraper
 
 CMD ["mongod", "--bind_ip_all"]
