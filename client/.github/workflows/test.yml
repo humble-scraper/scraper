@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "warning"
+      tags:
+        required: false
+        description: "Test scenario tags"
+
+jobs:
+  test:
+    name: Yarn Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: ["^15"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          yarn install --dev
+          yarn test
+          yarn build
+          yarn export && rm -rf out/

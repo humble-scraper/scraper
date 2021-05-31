@@ -1,0 +1,63 @@
+name: Deploy Site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test before deploying
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: ["^15"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Run tests
+        run: |
+          echo Running pre-deployment tests
+          yarn install --dev
+          yarn build
+          yarn test
+
+  deploy:
+    name: Deploy Site to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: test
+
+    env:
+      NODE_ENV: production
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "^15"
+
+      - name: Push to branch 'origin/site'
+        run: |
+          echo Deploying site to origin/site
+
+          git config --global user.email "github@actions.com"
+          git config --global user.name "GitHub Actions"
+          git checkout -b site
+          git reset --hard origin/main
+
+          yarn install --dev
+          yarn add --dev typescript
+          yarn deploy
+          touch docs/.nojekyll
+
+          git status
+          git add -A :/
+          git add docs/
+          git status
+          git commit -m 'GitHub Actions: deploying to origin/site'
+          git push --force --set-upstream origin site
+
+          echo Deployment complete
