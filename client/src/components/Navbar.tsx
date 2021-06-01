@@ -4,13 +4,37 @@ import { urlFor } from "../util";
 const ImgLogo = styled.img.attrs({
   src: urlFor("logo.png"),
 })`
-  height: 45%;
+  height: 10%;
   padding: 1.25em;
   box-sizing: initial;
 `;
 
+const Search = styled.input.attrs({
+})`
+   width: 100%;
+  height: 1%;
+  padding: 1.25em;
+  box-sizing: initial;
+  margin: 1em;
+`;
+const SearchBar = styled.div`
+
+
+`;
+
+const Row = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: top;
+`;
+
 const Navbar = styled.div.attrs({
-  children: <ImgLogo />,
+  children: (
+    <Row>
+      <ImgLogo />
+      <SearchBar />
+    </Row>
+  ),
 })`
   background-color: #494f5c;
   color: #d8d8da;
