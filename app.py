@@ -20,7 +20,8 @@ def better_sleep(sleep_time: Optional[float] = 60):
 
 
 def _web_service_worker() -> None:
-    uvicorn.run("webservice.webscrapp:scrapp", host="127.0.0.1", port=9999, log_level="debug")
+    uvicorn.run("webservice.webscrapp:scrapp",
+                host="127.0.0.1", port=9999, log_level="debug")
 
 
 def _main_loop_worker(sleep_time: float) -> None:
@@ -45,7 +46,8 @@ def run_main_loop(in_new_process: Optional[bool] = True,
                   sleep_time: Optional[float] = 60**60) -> None:
     print(f"Running main loop{' in new process' if in_new_process else ''}...")
     if in_new_process:
-        procs["mainloop"] = Process(target=_main_loop_worker, args=(sleep_time, ))
+        procs["mainloop"] = Process(
+            target=_main_loop_worker, args=(sleep_time, ))
         procs["mainloop"].start()
     else:
         _main_loop_worker(sleep_time)
