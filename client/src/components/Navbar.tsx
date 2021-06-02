@@ -5,12 +5,13 @@ const Row = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
+  height: inherit;
 `;
 
 const ImgLogo = styled.img.attrs({
   src: urlFor("logo.png"),
 })`
-  height: 10%;
+  height: 2.5em;
   padding: 1.25em;
   box-sizing: initial;
 `;
@@ -30,23 +31,17 @@ const SearchBarButton = styled.button.attrs({
   height: 60%;
 `;
 
-const SearchBar = styled.div.attrs({
-  children: (
+const SearchBarRoot = styled.div``;
+const SearchBar = () => (
+  <SearchBarRoot>
     <Row>
       <Search />
       <SearchBarButton />
     </Row>
-  ),
-})``;
+  </SearchBarRoot>
+);
 
-const Navbar = styled.div.attrs({
-  children: (
-    <Row>
-      <ImgLogo />
-      <SearchBar />
-    </Row>
-  ),
-})`
+const NavbarRoot = styled.div`
   &&& {
     background-color: #494f5c !important;
     color: #d8d8da;
@@ -60,5 +55,14 @@ const Navbar = styled.div.attrs({
     position: sticky;
   }
 `;
+
+const Navbar = (): JSX.Element => (
+  <NavbarRoot>
+    <Row>
+      <ImgLogo />
+      <SearchBar />
+    </Row>
+  </NavbarRoot>
+);
 
 export default Navbar;
