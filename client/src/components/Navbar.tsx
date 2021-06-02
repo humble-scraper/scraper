@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { urlFor } from "../util";
 
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+const FlexRow = styled.div`
+  display: flex;
   align-items: center;
   height: inherit;
 `;
@@ -16,28 +15,54 @@ const ImgLogo = styled.img.attrs({
   box-sizing: initial;
 `;
 
-const Search = styled.input.attrs({})`
-  width: 100%;
-  height: 1%;
-  padding: 1.25em;
+const Search = styled.input.attrs({
+  placeholder: "Search Something....",
+})`
+  background-color: #7d828a;
+  color: #16181d;
+  width: 20em;
+  height: inherit;
+  padding: 0.05em;
   box-sizing: initial;
-  margin: 1em;
+  font-size: large;
+  border-radius: 4px 0px 0px 4px;
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    color: #494f5c;
+  }
 `;
 
 const SearchBarButton = styled.button.attrs({
-  children: "Go!",
+  children: "GO!",
 })`
-  background-color: red;
-  height: 60%;
+  background-color: #7d828a;
+  height: inherit;
+  padding: 0.1em;
+  font-size: medium;
+  box-sizing: initial;
+  border-radius: 0px 4px 4px 0px;
+
+  &:hover {
+    background-color: #696d747f;
+    cursor: pointer;
+    padding: 0.2em;
+  }
+  &:active {
+    background-color: #696d74;
+  }
 `;
 
-const SearchBarRoot = styled.div``;
+const SearchBarRoot = styled.div`
+  margin-left: 5em;
+  height: 2em;
+  
+`;
 const SearchBar = () => (
   <SearchBarRoot>
-    <Row>
+    <FlexRow>
       <Search />
       <SearchBarButton />
-    </Row>
+    </FlexRow>
   </SearchBarRoot>
 );
 
@@ -58,10 +83,10 @@ const NavbarRoot = styled.div`
 
 const Navbar = (): JSX.Element => (
   <NavbarRoot>
-    <Row>
+    <FlexRow>
       <ImgLogo />
       <SearchBar />
-    </Row>
+    </FlexRow>
   </NavbarRoot>
 );
 
