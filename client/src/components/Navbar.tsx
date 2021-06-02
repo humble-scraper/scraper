@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import SearchBar from "./SearchBar";
+import AccountBar from "./AccountBar";
 import { urlFor } from "../util";
 
 const FlexRow = styled.div`
@@ -14,57 +16,6 @@ const ImgLogo = styled.img.attrs({
   padding: 1.25em;
   box-sizing: initial;
 `;
-
-const Search = styled.input.attrs({
-  placeholder: "Search Something....",
-})`
-  background-color: #7d828a;
-  color: #16181d;
-  width: 20em;
-  height: inherit;
-  padding: 0.05em;
-  box-sizing: initial;
-  font-size: large;
-  border-radius: 4px 0px 0px 4px;
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    color: #494f5c;
-  }
-`;
-
-const SearchBarButton = styled.button.attrs({
-  children: "GO!",
-})`
-  background-color: #7d828a;
-  height: inherit;
-  padding: 0.1em;
-  font-size: medium;
-  box-sizing: initial;
-  border-radius: 0px 4px 4px 0px;
-
-  &:hover {
-    background-color: #696d747f;
-    cursor: pointer;
-    padding: 0.2em;
-  }
-  &:active {
-    background-color: #696d74;
-  }
-`;
-
-const SearchBarRoot = styled.div`
-  margin-left: 5em;
-  height: 2em;
-  
-`;
-const SearchBar = () => (
-  <SearchBarRoot>
-    <FlexRow>
-      <Search />
-      <SearchBarButton />
-    </FlexRow>
-  </SearchBarRoot>
-);
 
 const NavbarRoot = styled.div`
   &&& {
@@ -86,6 +37,7 @@ const Navbar = (): JSX.Element => (
     <FlexRow>
       <ImgLogo />
       <SearchBar />
+      <AccountBar />
     </FlexRow>
   </NavbarRoot>
 );

@@ -17,9 +17,7 @@ import Content from "../src/components/Content";
 const Home = () => (
   <main>
     <Content>
-      <Navbar>
-        <img src="../assets/logo.png" />
-      </Navbar>
+      <Navbar/>
     </Content>
   </main>
 );
