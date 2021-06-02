@@ -1,0 +1,19 @@
+{
+  "name": "express-vpn-updater",
+  "description": "",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "sls offline start --useDocker",
+    "watch": "nodemon --watch ./ -e go,js --exec make build",
+    "build": "make build",
+    "deploy": "make deploy",
+    "clean": "make clean",
+    "test": "make test"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "serverless": "^2.43.1",
+    "serverless-offline": "^7.0.0"
+  }
+}

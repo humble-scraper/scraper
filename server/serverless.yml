@@ -1,0 +1,61 @@
+service: humble-bundle-scraper
+configValidationMode: error
+
+plugins:
+  - serverless-offline
+
+package:
+  patterns:
+    - "!./**"
+    - ./bin/**
+
+provider:
+  name: aws
+  stage: dev
+  region: us-east-1
+  runtime: go1.x
+  lambdaHashingVersion: 20201221
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            # TEMPORARY: narrow down the perms to just what you need here
+            - "s3:*"
+            - "s3:ListObjectsV2"
+            - "s3:PutObject"
+            - "s3:GetObject"
+            - "s3:DeleteObject"
+          Resource: "arn:aws:s3:::humble-bundle-scraper"
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: "AWS::S3::Bucket"
+      DeletionPolicy: Delete
+      Properties:
+        BucketName: humble-bundle-scraper
+
+functions:
+  healthcheck:
+    handler: bin/healthcheck.GET
+    events:
+      - http:
+          path: /healthcheck
+          method: get
+          cors: true
+
+  # ? An example with query params:
+  # latest:
+  #   handler: bin/latest.GET
+  #   events:
+  #     - http:
+  #         path: /latest
+  #         method: get
+  #         cors: true
+  #         request:
+  #           parameters:
+  #             querystrings:
+  #               redirect: false
+  #               fresh: false
