@@ -7,7 +7,8 @@ const Content = styled.div`
   height: 900px;
   width: 100%;
   display: "flex";
-  position: sticky;
+  position: relative;
+  
 `;
 
 export default Content;

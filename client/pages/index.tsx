@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Navbar from "../src/components/Navbar";
 import Content from "../src/components/Content";
+import Footer from "../src/components/Footer";
 
 
 // const Content = styled.div`
@@ -18,6 +19,7 @@ const Home = () => (
   <main>
     <Content>
       <Navbar/>
+      <Footer/>
     </Content>
   </main>
 );
