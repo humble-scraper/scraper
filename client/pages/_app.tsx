@@ -22,8 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       {/* prettier-ignore */}
       <Head>
-        <title>My App</title>
-        <link rel="icon"       href={`${assetPrefix}/favicon.ico`} />
+        <title>Humble Bundle Scrapper</title>
+        <link rel="icon"       href={`${assetPrefix}/h_logo.jpg`} />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300&display=swap" />

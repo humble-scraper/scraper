@@ -10,9 +10,8 @@ const FooterLogo = styled.img.attrs({
 `;
 
 const FooterRoot = styled.div`
-  height: 20%;
+  height: 15%;
   width: inherit;
-  position: fixed;
   bottom: 0;
   background-color: #2f333d;
   position: absolute;
