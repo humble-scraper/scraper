@@ -1,14 +1,25 @@
 import styled from "styled-components";
 
-const Content = styled.div`
-  background-color: #494f5c;
-  border-bottom: 1px #373c46 solid;
-  box-shadow: 1px 2px 3px rgb(0 0 0 / 45%);
-  height: 1000px;
-  width: 100%;
-  display: "flex";
-  position: relative;
-  
+const SectionTitle = styled.div`
+    font-family: 'Sofia Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: white;
+    font-size: 1.17em;
+    font-weight: bold;
+    margin: 1em;
+}
 `;
+
+const ContentRoot = styled.div`
+  display: block;
+`;
+
+const Content = (): JSX.Element => (
+  <ContentRoot>
+    <SectionTitle>The Ultimate Web Scraping experience!</SectionTitle>
+    <SectionTitle>Featured</SectionTitle>
+    <SectionTitle>Previously Scrolled</SectionTitle>
+    <SectionTitle>Saved</SectionTitle>
+  </ContentRoot>
+);
 
 export default Content;

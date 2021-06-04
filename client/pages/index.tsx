@@ -1,13 +1,15 @@
 import Navbar from "../src/components/Navbar";
-import Content from "../src/components/Content";
+import Root from "../src/components/Root";
 import Footer from "../src/components/Footer";
+import Content from "../src/components/Content";
 
 const Home = () => (
   <main>
-    <Content>
+    <Root>
       <Navbar/>
+      <Content/>
       <Footer/>
-    </Content>
+    </Root>
   </main>
 );
 
