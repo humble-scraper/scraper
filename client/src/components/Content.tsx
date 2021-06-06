@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Bundle from "./bundle/bundle";
 
 const SectionTitle = styled.div`
     font-family: 'Sofia Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -16,9 +17,13 @@ const ContentRoot = styled.div`
 const Content = (): JSX.Element => (
   <ContentRoot>
     <SectionTitle>The Ultimate Web Scraping experience!</SectionTitle>
+    <Bundle/>
     <SectionTitle>Featured</SectionTitle>
+    <Bundle/>
     <SectionTitle>Previously Scrolled</SectionTitle>
+    <Bundle/>
     <SectionTitle>Saved</SectionTitle>
+    <Bundle/>
   </ContentRoot>
 );
 

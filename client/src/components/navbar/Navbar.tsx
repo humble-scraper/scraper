@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import AccountBar from "./AccountBar";
-import { urlFor } from "../util";
+import { urlFor } from "../../util";
 
 const FlexRow = styled.div`
   display: flex;
