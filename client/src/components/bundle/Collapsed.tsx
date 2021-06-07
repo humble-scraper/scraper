@@ -9,21 +9,27 @@ const CollapsedRoot = styled.div`
   background-color: #282c34;
   margin: 1%;
   display: block;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2),
+    0 6px 20px 0 rgba(247, 244, 244, 0.19);
 `;
 
 const CollapsedFlex = styled.div`
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   width: inherit;
-  height:29%
+  height: 29%;
 `;
 
 const Title = styled.div.attrs({
   children: "Pink Butterfly",
 })`
-  background-color: #645b5b;
-  width:50%;
-  padding:0.5em;
+  width: 50%;
+  padding: 0.5em;
+  text-align: center;
+  font-size: large;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: white;
 `;
 
 const ImgService = styled.img.attrs({
@@ -37,7 +43,13 @@ const ImgService = styled.img.attrs({
 `;
 
 const BigAssButton = styled.button`
-  width: 50%;
+  width: 30%;
+  height: 50%;
+  margin-left: 2.1em;
+  align-self: center;
+  border-radius: 4px;
+  background-color: inherit;
+  color:white;
 `;
 
 const Collapsed = ({ open }: BundleContentProps): JSX.Element => (

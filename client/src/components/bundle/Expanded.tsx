@@ -15,6 +15,7 @@ const ExpandedRoot = styled.div`
   );
   margin: 1%;
   display: block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const ExpandedFlex = styled.div`
@@ -35,14 +36,21 @@ const ImgService = styled.img.attrs({
 const Title = styled.div.attrs({
   children: "Gold Butterfly",
 })`
-  background-color: #645b5b;
-  width:50%;
-  padding:0.5em;
+  width: 50%;
+  padding: 0.5em;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: #524c4c;
 `;
 
-
 const BigAssButton = styled.button`
-width: 50%;
+  width: 30%;
+  height: 50%;
+  margin-left: 2.1em;
+  align-self: center;
+  border-radius: 4px;
+  background-color: gold;
 `;
 
 const Expanded = ({ open }: BundleContentProps): JSX.Element => (
