@@ -17,7 +17,6 @@ const ContentRoot = styled.div`
 const Content = (): JSX.Element => (
   <ContentRoot>
     <SectionTitle>The Ultimate Web Scraping experience!</SectionTitle>
-    <Bundle/>
     <SectionTitle>Featured</SectionTitle>
     <Bundle/>
     <SectionTitle>Previously Scrolled</SectionTitle>
