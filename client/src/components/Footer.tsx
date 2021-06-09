@@ -9,16 +9,14 @@ const FooterLogo = styled.img.attrs({
   box-sizing: initial;
 `;
 
-
-
 const FooterRoot = styled.div`
   height: 15%;
   width: inherit;
   bottom: 0;
   background-color: #2f333d;
   position: absolute;
-  display:block;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  display: block;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-weight: bold;
   color: white;
 `;

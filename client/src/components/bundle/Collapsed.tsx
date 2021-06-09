@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import { urlFor } from "../../util";
 import BundleContentProps from "./BundleContentProps";
 
@@ -49,7 +48,7 @@ const BigAssButton = styled.button`
   align-self: center;
   border-radius: 4px;
   background-color: inherit;
-  color:white;
+  color: white;
 `;
 
 const Collapsed = ({ open }: BundleContentProps): JSX.Element => (
