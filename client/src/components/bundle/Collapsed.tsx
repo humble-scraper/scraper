@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { urlFor } from "../../util";
 import BundleContentProps from "./BundleContentProps";
@@ -51,7 +52,11 @@ const BigAssButton = styled.button`
   color: white;
 `;
 
-const Collapsed = ({ open }: BundleContentProps): JSX.Element => (
+type CollapsedProps = { open?: MouseEventHandler<HTMLButtonElement> };
+
+const Collapsed = (
+  { open }: CollapsedProps = { open: () => undefined }
+): JSX.Element => (
   <CollapsedRoot>
     <ImgService />
     <CollapsedFlex>

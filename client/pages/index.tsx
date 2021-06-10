@@ -3,7 +3,6 @@ import Navbar from "../src/components/navbar";
 import Footer from "../src/components/Footer";
 import Content from "../src/components/Content";
 
-
 const Root = styled.div`
   background-color: #494f5c;
   border-bottom: 1px #373c46 solid;
@@ -14,12 +13,12 @@ const Root = styled.div`
   position: relative;
 `;
 
-const Home = () => (
+const Home = (): JSX.Element => (
   <main>
     <Root>
-      <Navbar/>
-      <Content/>
-      <Footer/>
+      <Navbar />
+      <Content />
+      <Footer />
     </Root>
   </main>
 );

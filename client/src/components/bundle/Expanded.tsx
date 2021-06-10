@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { urlFor } from "../../util";
 import BundleContentProps from "./BundleContentProps";
@@ -54,7 +55,11 @@ const BigAssButton = styled.button`
   background-color: gold;
 `;
 
-const Expanded = ({ open }: BundleContentProps): JSX.Element => (
+type ExpandedProps = { open?: MouseEventHandler<HTMLButtonElement> };
+
+const Expanded = (
+  { open }: ExpandedProps = { open: () => undefined }
+): JSX.Element => (
   <ExpandedRoot>
     <ImgService />
     <ExpandedFlex>
