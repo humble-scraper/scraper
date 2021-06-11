@@ -1,7 +1,6 @@
 import { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { urlFor } from "../../util";
-import BundleContentProps from "./BundleContentProps";
 
 const ExpandedRoot = styled.div`
   height: 300px;
